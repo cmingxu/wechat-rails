@@ -17,6 +17,10 @@ class Wechat::Api
     get('user/get', params||{})
   end
 
+  def js_ticket
+    get("ticket/getticket", params: { type: 'jsapi' })
+  end
+
   def user openid
     get("user/info", params:{openid: openid})
   end
@@ -45,10 +49,10 @@ class Wechat::Api
   def custom_message_send message
     post "message/custom/send", message.to_json, content_type: :json
   end
-  
+
   def template_message_send message
     post "message/template/send", message.to_json, content_type: :json
-  end  
+  end
 
   protected
   def get path, headers={}
@@ -66,7 +70,7 @@ class Wechat::Api
     rescue Wechat::AccessTokenExpiredError => ex
       access_token.refresh
       retry unless (tries -= 1).zero?
-    end 
+    end
   end
 
 end
