@@ -114,6 +114,12 @@ module Wechat
       update(:MsgType=>"template",:Template=> template_fields)
     end
 
+    def raw_template opts={}, raw_keys=[]
+      @raw_keys = raw_keys
+      template_fields = opts.symbolize_keys.slice(:template_id, :topcolor, :url, :data)
+      update(:MsgType=>"template",:Template=> template_fields)
+    end
+
     def to_xml
       message_hash.to_xml(root: "xml", children: "item", skip_instruct: true, skip_types: true)
     end
@@ -159,14 +165,15 @@ module Wechat
     def deep_recursive hash, &block
       hash.inject({}) do |memo, val|
         key,value = *val
-        case value.class.name
-        when "Hash"
-          value = deep_recursive(value, &block)
-        when "Array"
-          value = value.collect{|item| item.is_a?(Hash) ? deep_recursive(item, &block) : item}
+        unless (@raw_keys || []).include? key
+          case value.class.name
+          when "Hash"
+            value = deep_recursive(value, &block)
+          when "Array"
+            value = value.collect{|item| item.is_a?(Hash) ? deep_recursive(item, &block) : item}
+          end
+          key,value = yield(key, value)
         end
-
-        key,value = yield(key, value)
         memo.merge!(key => value)
       end
     end
