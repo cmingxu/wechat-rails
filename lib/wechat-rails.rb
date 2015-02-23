@@ -1,5 +1,9 @@
 require "wechat/api"
 
+if !defined?(WECHAT_LOGGER)
+  WECHAT_LOGGER = Logger.new $stdout
+end
+
 module Wechat
   autoload :Message, "wechat/message"
   autoload :Responder, "wechat/responder"
@@ -38,6 +42,8 @@ end
 if defined? ActionController::Base
   class ActionController::Base
     def self.wechat_responder opts={}
+      WECHAT_LOGGER.debug "  wechat_responder"
+      WECHAT_LOGGER.debug opts
       self.send(:include, Wechat::Responder)
       if (opts.empty?)
         self.wechat = Wechat.api
