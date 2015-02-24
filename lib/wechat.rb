@@ -1,13 +1,13 @@
 
 require 'thor'
-require 'json'  
+require 'json'
 require "active_support/core_ext"
 require 'fileutils'
 
 require_relative "wechat-rails"
 
 
-class App < Thor                                                 
+class App < Thor
   class Helper
     def self.with(options)
       appid =  Wechat.config.appid
@@ -70,7 +70,7 @@ HELP
     file = File.new(path)
     puts Helper.with(options).media_create(type, file)
   end
-  
+
   desc "custom_text [OPENID, TEXT_MESSAGE]", "发送文字客服消息"
   def custom_text openid, text_message
     puts Helper.with(options).custom_message_send Wechat::Message.to(openid).text(text_message)

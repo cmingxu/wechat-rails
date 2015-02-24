@@ -80,6 +80,7 @@ module Wechat
 
     def create
       request = Wechat::Message.from_hash(params[:xml] || post_xml)
+      WECHAT_LOGGER.debug "resquest #{request})"
       response = self.class.responder_for(request) do |responder, *args|
         responder ||= self.class.responders(:fallback).first
 
@@ -87,6 +88,8 @@ module Wechat
         next request.reply.text responder[:respond] if (responder[:respond])
         next responder[:proc].call(*args.unshift(request)) if (responder[:proc])
       end
+
+      WECHAT_LOGGER.debug "response #{response.try(:to_xml)}"
 
       if response.respond_to? :to_xml
         render xml: response.to_xml

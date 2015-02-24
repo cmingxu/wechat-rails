@@ -6,6 +6,8 @@ class Wechat::Api
 
   API_BASE = "https://api.weixin.qq.com/cgi-bin/"
   FILE_BASE = "http://file.api.weixin.qq.com/cgi-bin/"
+  QR_CREATION = "https://api.weixin.qq.com/cgi-bin/qrcode/create"
+  QR_SHOW = "https://mp.weixin.qq.com/cgi-bin/showqrcode"
 
   def initialize appid, secret, token_file
     @client = Wechat::Client.new(API_BASE)
@@ -33,9 +35,28 @@ class Wechat::Api
     get("menu/delete")
   end
 
+  def qr_show(ticket)
+    get QR_SHOW, params: {ticket: ticket}
+  end
+
   def menu_create menu
     # 微信不接受7bit escaped json(eg \uxxxx), 中文必须UTF-8编码, 这可能是个安全漏洞
     post("menu/create", JSON.generate(menu))
+  end
+
+  def qr_tmp_create(scene_id)
+    params = {"expire_seconds" => 1800,
+     "action_name" => "QR_SCENE",
+     "action_info" => {"scene" => {"scene_id" => scene_id }}}
+    post QR_CREATION, params.to_json
+  end
+
+  def qr_permnent_create(scene_id)
+    params = {
+     "action_name" => "QR_LIMIT_SCENE",
+     "action_info" => {"scene" => {"scene_id" => scene_id }}}
+
+    post QR_CREATION, params.to_json
   end
 
   def media media_id

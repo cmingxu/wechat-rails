@@ -73,6 +73,14 @@ HELP
     puts "File downloaded"
   end
 
+  desc "tmp_qr_create [scene_id]", "创建临时二维码"
+  def tmp_qr_create(scene_id)
+    if (qr = Helper.with(options).qr_tmp_create(scene_id))
+      puts "tmp qr_create #{qr}"
+    end
+  end
+
+
   desc "media_create [MEDIA_ID, PATH]", "媒体上传"
   def media_create(type, path)
     file = File.new(path)
