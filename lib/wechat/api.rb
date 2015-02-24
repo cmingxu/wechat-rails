@@ -36,7 +36,7 @@ class Wechat::Api
   end
 
   def qr_show(ticket)
-    get QR_SHOW, params: {ticket: ticket}
+    get "showqrcode", params: {ticket: ticket}
   end
 
   def menu_create menu
@@ -48,7 +48,7 @@ class Wechat::Api
     params = {"expire_seconds" => 1800,
      "action_name" => "QR_SCENE",
      "action_info" => {"scene" => {"scene_id" => scene_id }}}
-    post QR_CREATION, params.to_json
+    post "qrcode/create", params.to_json
   end
 
   def qr_permnent_create(scene_id)
@@ -56,7 +56,7 @@ class Wechat::Api
      "action_name" => "QR_LIMIT_SCENE",
      "action_info" => {"scene" => {"scene_id" => scene_id }}}
 
-    post QR_CREATION, params.to_json
+    post "qrcode/create", params.to_json
   end
 
   def media media_id
