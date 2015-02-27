@@ -25,7 +25,7 @@ module Wechat
 
       if !defined?(WECHAT_LOGGER) && defined?(Rails)
         require 'logger'
-        WECHAT_LOGGER = Logger.new Rails.root.join("log/wechat.log")
+        WECHAT_LOGGER = Logger.new(Rails.root.join("log/wechat.log"))
       end
 
 
