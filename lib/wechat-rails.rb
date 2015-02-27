@@ -2,7 +2,7 @@ require "wechat/api"
 
 if !defined?(WECHAT_LOGGER) 
   require 'logger'
-  WECHAT_LOGGER = Logger.new(ENV["RAILS_ENV"] == 'developent' ? $stdout : "/home/ubuntu/lbpark/current/log/wechat.log")
+  WECHAT_LOGGER = Logger.new((ENV["RAILS_ENV"] && ENV["RAILS_ENV"] != 'development') ? "/home/ubuntu/lbpark/current/log/wechat.log" : $stdout)
 end
 
 module Wechat
