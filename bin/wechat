@@ -11,7 +11,7 @@ require 'fileutils'
 require 'yaml'
 
 
-class App < Thor                                                 
+class App < Thor
   class Helper
     def self.with(options)
       config_file = File.join(Dir.home, ".wechat.yml")

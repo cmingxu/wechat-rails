@@ -1,10 +1,5 @@
 require "wechat/api"
 
-if !defined?(WECHAT_LOGGER)
-  require 'logger'
-  WECHAT_LOGGER = Logger.new $stdout
-end
-
 module Wechat
   autoload :Message, "wechat/message"
   autoload :Responder, "wechat/responder"
@@ -27,6 +22,12 @@ module Wechat
         config_file = Rails.root.join("config/wechat.yml")
         config = YAML.load(ERB.new(File.new(config_file).read).result)[Rails.env] if (File.exist?(config_file))
       end
+
+      if !defined?(WECHAT_LOGGER) && defined?(Rails)
+        require 'logger'
+        WECHAT_LOGGER = Logger.new Rails.root.join("log/wechat.log")
+      end
+
 
       config ||= {appid: ENV["WECHAT_APPID"], secret: ENV["WECHAT_SECRET"], token: ENV["WECHAT_TOKEN"], access_token: ENV["WECHAT_ACCESS_TOKEN"]}
       config.symbolize_keys!
