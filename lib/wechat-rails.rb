@@ -51,7 +51,7 @@ if defined? ActionController::Base
         self.wechat = Wechat.api
         self.token = Wechat.config.token
       else
-        self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token], ops[:js_api_ticket])
+        self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token], opts[:js_api_ticket])
         self.token = opts[:token]
       end
     end
