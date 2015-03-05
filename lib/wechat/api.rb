@@ -2,14 +2,15 @@ require 'wechat/client'
 require 'wechat/access_token'
 
 class Wechat::Api
-  attr_reader :access_token, :client
+  attr_reader :access_token, :client, :js_api_ticket
 
   API_BASE = "https://api.weixin.qq.com/cgi-bin/"
   FILE_BASE = "http://file.api.weixin.qq.com/cgi-bin/"
   QR_CREATION = "https://api.weixin.qq.com/cgi-bin/qrcode/create"
   QR_SHOW = "https://mp.weixin.qq.com/cgi-bin/showqrcode"
 
-  def initialize appid, secret, token_file
+  def initialize appid, secret, token_file, js_api_ticket
+    @js_api_ticket = js_api_ticket
     @client = Wechat::Client.new(API_BASE)
     @access_token = Wechat::AccessToken.new(@client, appid, secret, token_file)
   end
@@ -20,7 +21,14 @@ class Wechat::Api
   end
 
   def js_ticket
-    get("ticket/getticket", params: { type: 'jsapi' })
+    if File.exist?(js_api_ticket) && (data = File.read(js_api_ticket)) && Time.now <= YAML.load(data)["expires_at"]
+      YAML.load(data)["ticket"]
+    else
+      res = get("ticket/getticket", params: { type: 'jsapi' })
+      res["expires_at"] = Time.now + res["expires_in"].to_i
+      File.open(js_api_ticket, "w") do |f| f.write(YAML.dump(res)) end
+      res["ticket"]
+    end
   end
 
   def user openid
@@ -46,15 +54,15 @@ class Wechat::Api
 
   def qr_tmp_create(scene_id)
     params = {"expire_seconds" => 1800,
-     "action_name" => "QR_SCENE",
-     "action_info" => {"scene" => {"scene_id" => scene_id }}}
+              "action_name" => "QR_SCENE",
+              "action_info" => {"scene" => {"scene_id" => scene_id }}}
     post "qrcode/create", params.to_json
   end
 
   def qr_permnent_create(scene_id)
     params = {
-     "action_name" => "QR_LIMIT_SCENE",
-     "action_info" => {"scene" => {"scene_id" => scene_id }}}
+      "action_name" => "QR_LIMIT_SCENE",
+      "action_info" => {"scene" => {"scene_id" => scene_id }}}
 
     post "qrcode/create", params.to_json
   end

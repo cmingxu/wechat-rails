@@ -37,7 +37,7 @@ module Wechat
   end
 
   def self.api
-    @api ||= Wechat::Api.new(self.config.appid, self.config.secret, self.config.access_token)
+    @api ||= Wechat::Api.new(self.config.appid, self.config.secret, self.config.access_token, self.config.js_api_ticket)
   end
 end
 
@@ -51,7 +51,7 @@ if defined? ActionController::Base
         self.wechat = Wechat.api
         self.token = Wechat.config.token
       else
-        self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token])
+        self.wechat = Wechat::Api.new(opts[:appid], opts[:secret], opts[:access_token], ops[:js_api_ticket])
         self.token = opts[:token]
       end
     end

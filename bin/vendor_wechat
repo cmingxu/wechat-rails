@@ -21,8 +21,9 @@ class App < Thor
       appid =  config["vendor_appid"]
       secret = config["vendor_secret"]
       token_file = options[:toke_file] ||  config["vendor_access_token"] || "/var/tmp/vendor_wechat_access_token"
+      js_api_ticket  = options[:vendor_js_api_ticket] || config["vendor_js_api_ticket"] || "/var/tmp/vendor_wechat_js_api_ticket"
 
-      if (appid.nil? || secret.nil? || token_file.nil?)
+      if (appid.nil? || secret.nil? || token_file.nil? || js_api_ticket.nil?)
       puts <<-HELP
 You need create ~/.wechat.yml with wechat appid and secret. For example:
 
@@ -33,7 +34,7 @@ You need create ~/.wechat.yml with wechat appid and secret. For example:
 HELP
       exit 1
       end
-      Wechat::Api.new(appid, secret, token_file)
+      Wechat::Api.new(appid, secret, token_file, js_api_ticket)
     end
   end
 
@@ -53,6 +54,11 @@ HELP
   desc "menu", "当前菜单"
   def menu
     puts Helper.with(options).menu
+  end
+
+  desc "js_ticket", "js ticket"
+  def js_ticket
+    puts Helper.with(options).js_ticket
   end
 
   desc "menu_delete", "删除菜单"

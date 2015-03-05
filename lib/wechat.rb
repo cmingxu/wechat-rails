@@ -12,9 +12,10 @@ class App < Thor
     def self.with(options)
       appid =  Wechat.config.appid
       secret = Wechat.config.secret
-      token_file = options[:toke_file] || Wechat.config.access_token
+      token_file = options[:token_file] || Wechat.config.access_token
+      js_api_ticket = options[:js_api_ticket] || Wechat.config.js_api_ticket
 
-      if (appid.nil? || secret.nil? || token_file.nil?)
+      if (appid.nil? || secret.nil? || token_file.nil? || js_api_ticket.nil?)
       puts <<-HELP
 You need create ~/.wechat.yml with wechat appid and secret. For example:
 
@@ -25,7 +26,7 @@ You need create ~/.wechat.yml with wechat appid and secret. For example:
 HELP
       exit 1
       end
-      Wechat::Api.new(appid, secret, token_file)
+      Wechat::Api.new(appid, secret, token_file, js_api_ticket)
     end
   end
 
