@@ -87,6 +87,22 @@ HELP
   end
 
 
+  desc "permnent_qr_create [scene_id]", "创建二维码"
+  def qr_permnent_create(scene_id)
+    if (qr = Helper.with(options).qr_permnent_create(scene_id))
+      puts "permalnent qr_create #{qr}"
+    end
+  end
+
+  desc "qr show [ticket]", "获取二维码"
+  def qr_permnent_create(ticket)
+    if (qr = Helper.with(options).qr_show(ticket))
+      puts " qr show #{qr}"
+    end
+  end
+
+
+
   desc "media_create [MEDIA_ID, PATH]", "媒体上传"
   def media_create(type, path)
     file = File.new(path)
