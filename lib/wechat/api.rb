@@ -62,7 +62,7 @@ class Wechat::Api
   def qr_permnent_create(scene_id)
     params = {
       "action_name" => "QR_LIMIT_SCENE",
-      "action_info" => {"scene" => {"scene_str" => scene_id }}}
+      "action_info" => {"scene" => {"scene_id" => scene_id }}}
 
     post "qrcode/create", params.to_json
   end
