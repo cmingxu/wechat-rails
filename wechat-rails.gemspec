@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{bin app,config,lib}/**/*"] + ["LICENSE", "Rakefile", "README.md"]
   s.executables << 'wechat'
   s.executables << 'vendor_wechat'
+  s.executables << 'wechat_shui'
 
   s.add_dependency "rails", ">= 3.2.14"
   s.add_dependency "nokogiri", '>=1.6.0'
