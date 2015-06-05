@@ -20,8 +20,8 @@ class App < Thor
       config ||= {}
       appid =  config["shui_appid"]
       secret = config["shui_secret"]
-      token_file = options[:shui_token_file] ||  config["access_token"] || "/var/tmp/wechat_access_token"
-      js_api_ticket = options[:shui_js_api_ticket] || config["js_api_ticket"] || "/var/tmp/wechat_js_api_ticket"
+      token_file = options[:shui_token_file] ||  config["shui_access_token"] || "/var/tmp/wechat_access_token"
+      js_api_ticket = options[:shui_js_api_ticket] || config["shui_js_api_ticket"] || "/var/tmp/wechat_js_api_ticket"
 
       if (appid.nil? || secret.nil? || token_file.nil? || js_api_ticket.nil?)
       puts <<-HELP
